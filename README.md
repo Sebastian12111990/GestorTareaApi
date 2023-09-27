@@ -7,10 +7,10 @@ Este proyecto es una API de gestión de tareas que permite crear, modificar, eli
 📦 Prerrequisitos
 
   * OpenJDK: Debes tener instalado el OpenJDK 17.
-* PostgreSQL: Asegúrate de tener instalada la base de datos PostgreSQL.
+  * PostgreSQL: Asegúrate de tener instalada la base de datos PostgreSQL.
 
 🔧 Configuración de la Base de Datos
-Lanza tu cliente PostgreSQL y ejecuta el siguiente script para preparar la base de datos:
+    Lanza tu cliente PostgreSQL y ejecuta el siguiente script para preparar la base de datos:
 
     CREATE DATABASE gestor_tareas;
     CREATE ROLE usuario_tarea WITH LOGIN PASSWORD '12345';
@@ -52,45 +52,82 @@ Ejemplo de respuesta exitosa:
 
 401 Unauthorized: Si la autenticación falla, por ejemplo, debido a credenciales incorrectas.
 
-Endpoints de TareaController:
+   API de Tareas 📚
+   La API de Tareas permite a los desarrolladores interactuar con un conjunto de operaciones CRUD básicas para gestionar tareas.
+   
+   ENDPOINT PARA LISTAR TAREAS
+   * GET /tarea/
+   * Descripción:este endpoint devuelve una lista de tareas. Si no hay tareas disponibles, se devuelve un array vacío.
+   * Parámetros:No se requieren parámetros para este endpoint.
+   * Respuestas:200 OK
+   * Este código de respuesta indica que la solicitud fue exitosa. Se devolverá un array de tareas o un array vacío si no hay tareas disponibles.
 
-IMPORTANTE! para utilizar los endpoint debe tener la firma jwt 
+   Ejemplo respuesta vacia
 
-Listar todas las tareas
+         []
 
-    Método: GET
-    Ruta: /tarea/
-    Descripción: Retorna una lista con todas las tareas.
-    
-    Buscar tarea por ID
-    Método: GET
-    Ruta: /tarea/{id}
-    Descripción: Retorna una tarea basada en su ID. Si la tarea no se encuentra, retorna un estado NOT_FOUND.
-    
-    Crear una nueva tarea
-    Método: POST
-    Ruta: /tarea/
-    Descripción: Crea una nueva tarea. Se requiere que el estado tenga un ID. Si la tarea ya existe (basada en el título), retorna un error.
-    
-    Modificar una tarea existente
-    Método: PUT
-    Ruta: /tarea/{id}
-    Descripción: Modifica una tarea existente basada en su ID. Se requiere que el estado tenga un ID. Si la tarea no se encuentra, retorna un estado NOT_FOUND.
-    
-    Eliminar una tarea
-    Método: DELETE
-    Ruta: /tarea/{id}
-    Descripción: Elimina una tarea basada en su ID.
-    
-    Asignar una tarea a un usuario
-    Método: POST
-    Ruta: /tarea/usuario/{usuarioId}/tarea/{tareaId}
-    Descripción: Asigna una tarea específica a un usuario específico. Si el usuario o la tarea no se encuentran, retorna un estado NOT_FOUND.
-    
-    Eliminar la asignación de una tarea a un usuario
-    Método: DELETE
-    Ruta: /tarea/usuario/{usuarioId}/tarea/{tareaId}
-    Descripción: Elimina la asignación de una tarea específica de un usuario específico. Si el usuario o la tarea no se encuentran, retorna un estado NOT_FOUND.
+   Ejemplo de respuesta con tareas:
+  
+      [
+          {
+              "createdAt": "2023-09-27T14:26:34.187+00:00",
+              "updatedAt": "2023-09-27T14:26:34.187+00:00",
+              "id": 1,
+              "titulo": "Modelar BD3",
+              "fechaDevencimiento": "26-09-2023 08:00",
+              "estado": {
+                  "createdAt": "2023-09-27T14:23:03.411+00:00",
+                  "updatedAt": "2023-09-27T14:23:03.411+00:00",
+                  "id": 1,
+                  "estado": "Pendiente"
+              },
+              "usuarioTareas": []
+          },
+          {
+              "createdAt": "2023-09-27T14:26:57.257+00:00",
+              "updatedAt": "2023-09-27T14:26:57.257+00:00",
+              "id": 2,
+              "titulo": "Programar Backend",
+              "fechaDevencimiento": "26-09-2023 08:00",
+              "estado": {
+                  "createdAt": "2023-09-27T14:23:03.411+00:00",
+                  "updatedAt": "2023-09-27T14:23:03.411+00:00",
+                  "id": 1,
+                  "estado": "Pendiente"
+              },
+              "usuarioTareas": []
+          }
+      ]
+
+   Obtener Tarea por ID 🕵️‍♂️
+   * GET /tarea/{id}
+   * Descripción      : Obtiene la información detallada de una tarea específica, identificada por su ID único.
+   * Parámetros id    : ID único de la tarea que se desea recuperar.
+   * Respuestas 200 OK: Se devuelve cuando se encuentra la tarea solicitada.
+   * 404 Not Found    : Se devuelve cuando no se encuentra la tarea con el ID proporcionado.
+
+   Ejemplo de solicitud
+   
+         GET http://localhost:8080/tarea/1
+   Ejemplos de respuesta 200 OK
+   
+        {
+           "createdAt": "2023-09-27T14:26:34.187+00:00",
+           "updatedAt": "2023-09-27T14:26:34.187+00:00",
+           "id": 1,
+           "titulo": "Modelar BD3",
+           "fechaDevencimiento": "26-09-2023 08:00",
+           "estado": {
+               "createdAt": "2023-09-27T14:23:03.411+00:00",
+               "updatedAt": "2023-09-27T14:23:03.411+00:00",
+               "id": 1,
+               "estado": "Pendiente"
+           },
+           "usuarioTareas": []
+       }
+   Ejemplos de repuesta 404 NOT FOUND
+
+         No se proporciona cuerpo en la respuesta.
 
 Comentarios adicionales
 
