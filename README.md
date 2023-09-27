@@ -25,8 +25,8 @@ Modelo de Datos
 ![image](https://github.com/Sebastian12111990/GestorTareaApi/assets/60678340/37a73e07-d18b-49a7-b366-ab78dfe48be5)
 
 
-Se ejecutara automaticamente al levantar la aplicacion el archivo Data.sql , al levantar la aplicacion jpa de spring se encargara de crear y mapear las tabla de la base de datos 
-una vez hecho esto se ejecutara el script
+"Al iniciar la aplicación, el archivo data.sql se ejecutará automáticamente. Una vez que la aplicación se haya levantado, JPA de Spring se encargará de crear y mapear las tablas en la base de datos.
+Tras completar este proceso, se llevará a cabo la ejecución del script en data.sql."
 
 existen 2 usuarios para prueba 2 perfiles
 
