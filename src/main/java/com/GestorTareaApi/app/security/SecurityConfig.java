@@ -22,7 +22,7 @@ public class SecurityConfig {
 
         http.sessionManagement( sess ->  sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        http.authorizeHttpRequests(auth -> auth.requestMatchers("/tarea/**"     ).hasAuthority("ROLE_ADMIN").anyRequest().permitAll())
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/tarea/**" ).hasAuthority("ROLE_ADMIN").requestMatchers("/tarea/" ).hasAuthority("ROLE_ADMIN").anyRequest().permitAll())
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
 

@@ -1,10 +1,11 @@
 package com.GestorTareaApi.app.entities;
 
+import com.GestorTareaApi.app.utils.FechasBase;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "usuarios_perfiles", schema = "public")
-public class UsuarioPerfil {
+public class UsuarioPerfil extends FechasBase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

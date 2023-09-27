@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Optional;
+
 @EnableWebSecurity
 @SpringBootApplication
 public class GestorTareaApiApplication {
@@ -27,10 +29,19 @@ public class GestorTareaApiApplication {
 	public CommandLineRunner initData(UsuarioRepository usuarioRepository) {
 		return args -> {
 
-			if (usuarioRepository.count() == 0) { //se ejecutara solo una vez cuando el sistema recien se levante
+			if (usuarioRepository.count() > 1) { //solo es fines de prueba
 
-				Usuario usuario1 = usuarioRepository.save(new Usuario("Sebastian" , "Perez"   , passwordEncoder.encode("12345") , "seba@gmail.com"   ));
-				Usuario usuario2 = usuarioRepository.save(new Usuario("Luis"      , "Pruebas" , passwordEncoder.encode("12345") , "pruebas@gmail.com"));
+				Optional<Usuario> usuarioOptional1  = usuarioRepository.findById(1L);
+				Optional<Usuario> usuarioOptional2  = usuarioRepository.findById(2L);
+
+				Usuario usuario1  = usuarioOptional1.get();
+				Usuario usuario2  = usuarioOptional2.get();
+
+				usuario1.setPassword(passwordEncoder.encode("12345"));
+				usuario2.setPassword(passwordEncoder.encode("12345"));
+
+				usuarioRepository.save(usuario1);
+				usuarioRepository.save(usuario2);
 
 			}
 

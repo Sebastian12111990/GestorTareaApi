@@ -20,7 +20,7 @@ public class Tarea extends FechasBase implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
     @NotBlank
-    @Column(name = "tituto")
+    @Column(name = "titulo")
     private String titulo;
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")

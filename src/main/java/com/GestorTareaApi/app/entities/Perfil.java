@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import com.GestorTareaApi.app.utils.FechasBase;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
@@ -13,7 +14,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "perfil" , schema="public")
-public class Perfil implements Serializable{
+public class Perfil extends FechasBase implements Serializable{
 
     private static final long serialVersionUID = 1L;
 

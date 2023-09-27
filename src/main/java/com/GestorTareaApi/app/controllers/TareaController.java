@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -29,7 +30,8 @@ public class TareaController {
 
     @GetMapping("/")
     public ResponseEntity<?> listarTareas(){
-       return ResponseEntity.status(HttpStatus.OK).body(iTareaService.listarTareas());
+        List<Tarea> tareaList = iTareaService.listarTareas();
+       return ResponseEntity.status(HttpStatus.OK).body(tareaList);
     }
 
     @GetMapping("/{id}")
@@ -50,7 +52,7 @@ public class TareaController {
     private ResponseEntity<?> crearTarea(@Valid @RequestBody Tarea tarea , BindingResult result){
 
         if (tarea.getEstado().getId() == null){
-            return new ResponseEntity<>("Estado no encontrado", HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("se necesita estado id");
         }
 
         if (result.hasErrors()){

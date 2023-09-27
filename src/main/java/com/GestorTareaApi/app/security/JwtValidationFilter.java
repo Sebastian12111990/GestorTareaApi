@@ -49,33 +49,32 @@ public class JwtValidationFilter extends OncePerRequestFilter{
 
             try {
                 username = jwtService.getUsernameFromJWT(jwt);
+
+                if(Objects.nonNull(username) && Objects.isNull(SecurityContextHolder.getContext().getAuthentication())) {
+
+                    final var userDetails = this.jwtUserDetailService.loadUserByUsername(username);
+
+                    if(this.jwtService.validateToken(jwt, userDetails)) {
+
+                        var usernameAndPasswordAuthToken = new UsernamePasswordAuthenticationToken(userDetails , null , userDetails.getAuthorities());
+
+                        usernameAndPasswordAuthToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                        SecurityContextHolder.getContext().setAuthentication(usernameAndPasswordAuthToken);
+                    }
+
+                }
+
             }catch(IllegalArgumentException ex) {
                 ex.printStackTrace();
             }catch(ExpiredJwtException ex){
                 ex.printStackTrace();
             }catch(SignatureException ex){
-               // ex.printStackTrace();
-
-            }
-        }
-
-        if(Objects.nonNull(username) && Objects.isNull(SecurityContextHolder.getContext().getAuthentication())) {
-
-            final var userDetails = this.jwtUserDetailService.loadUserByUsername(username);
-
-            if(this.jwtService.validateToken(jwt, userDetails)) {
-
-                var usernameAndPasswordAuthToken = new UsernamePasswordAuthenticationToken(userDetails , null , userDetails.getAuthorities());
-
-                usernameAndPasswordAuthToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(usernameAndPasswordAuthToken);
+                ex.printStackTrace();
             }
 
         }
-
         filterChain.doFilter(request, response);
-
 
     }
 

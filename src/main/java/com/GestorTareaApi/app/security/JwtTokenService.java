@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +28,13 @@ public class JwtTokenService {
     }
 
     public <T> T getClaimsFromToken(String token , Function<Claims , T> claimsResolver) {
-        final var claims = this.getAllClaimnsFromTokens(token);
-        return claimsResolver.apply(claims);
+        try{
+            final var claims = this.getAllClaimnsFromTokens(token);
+            return claimsResolver.apply(claims);
+        }catch (ExpiredJwtException ex){
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     private Date getExpirationDateFromToken(String token) {
