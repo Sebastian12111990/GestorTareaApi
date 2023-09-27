@@ -1,4 +1,6 @@
-ntrada📌 Gestor de Tareas API
+![image](https://github.com/Sebastian12111990/GestorTareaApi/assets/60678340/37a73e07-d18b-49a7-b366-ab78dfe48be5)
+
+📌 Gestor de Tareas API
 
 Este proyecto es una API de gestión de tareas que permite crear, modificar, eliminar y asignar tareas a usuarios.
 
