@@ -268,6 +268,52 @@ Cuando se elimina con éxito:
  200 OK : No se proporciona cuerpo en la respuesta.
 
 
+Asignar Usuario a una Tarea 🧑‍💼
+ * POST /usuario/{usuarioId}/tarea/{tareaId}
+ * Descripción : Este endpoint permite asignar un usuario a una tarea específica. Se requiere enviar tanto el ID del usuario como el ID de la tarea en la URL.
+ * Parámetros usuarioId: ID único del usuario que se desea asignar.
+              tareaId  : ID único de la tarea a la que se desea asignar el usuario.
+   
+Respuestas
+  * 200 OK: Se devuelve cuando la asignación es exitosa o si el usuario ya ha sido asignado a la tarea anteriormente.
+  * 404 NOT FOUND: Se devuelve cuando el usuario o la tarea no se encuentran en el sistema.
+
+Ejemplo de solicitud
+
+    POST http://localhost:8080/usuario/1/tarea/2
+    
+Ejemplos de respuesta
+
+Asignación exitosa:
+
+     {
+         "message": "usuario Juan Pérez ha sido asignado en la tarea Programar Backend"
+     }
+     
+Error al asignar:
+
+    {
+        "message": "error al asignar usuario a tarea"
+    }
+    
+Usuario ya asignado:
+
+    {
+        "message": "usuario ya ha sido asignado a esta tarea"
+    }
+    
+Usuario no encontrados:
+
+    {
+        "message": "usuario no encontrado"
+    }
+
+Tarea no ecnontrada
+
+    {
+        "message": "tarea no encontrada"
+    }
+
 
 
 Comentarios adicionales
