@@ -55,7 +55,7 @@ Ejemplo de respuesta exitosa:
    API de Tareas 📚
    La API de Tareas permite a los desarrolladores interactuar con un conjunto de operaciones CRUD básicas para gestionar tareas.
    
-   ENDPOINT PARA LISTAR TAREAS
+   Listar Tareas 📋
    * GET /tarea/
    * Descripción:este endpoint devuelve una lista de tareas. Si no hay tareas disponibles, se devuelve un array vacío.
    * Parámetros:No se requieren parámetros para este endpoint.
@@ -128,6 +128,66 @@ Ejemplo de respuesta exitosa:
    Ejemplos de repuesta 404 NOT FOUND
 
          No se proporciona cuerpo en la respuesta.
+
+
+ Crear una nueva Tarea 📝
+  * POST /tarea/
+  * Descripción : Este endpoint permite crear una nueva tarea. Para ello, es necesario enviar los detalles de la tarea en el cuerpo de la solicitud.
+  * Cuerpo de la Solicitud :Es necesario enviar un objeto JSON con los siguientes campos:
+  
+ Campos
+  * titulo: Título de la tarea.
+  * fechaDevencimiento: Fecha de vencimiento de la tarea.
+  * estado: Objeto que contiene el ID del estado de la tarea.
+
+ Respuestas
+  * 200 OK: Se devuelve cuando la tarea se crea con éxito.
+  * 400 BAD REQUEST: Se devuelve cuando hay errores en la solicitud o cuando falta información requerida.
+
+Ejemplo de solicitud
+
+     POST http://localhost:8080/tarea/
+     Content-Type: application/json
+
+    {
+        "titulo":"Programar Backend",
+        "fechaDevencimiento": "26-09-2023 08:00",
+        "estado" : {
+            "id":1
+        }
+    }
+    
+Ejemplos de respuesta
+
+Cuando la tarea ya existe:
+
+    {
+        "message": "ya existe tarea"
+    }
+
+Cuando falta el ID del estado:
+
+     {
+         "message": "se necesita estado id"
+     }
+Cuando hay errores de validación:
+
+    {
+        "fechaDevencimiento": "no debe ser nulo",
+        "titulo": "no debe estar vacío"
+    }
+Cuando se crea con éxito:
+  
+    {
+         "createdAt": "fecha de creación",
+         "updatedAt": "fecha de actualización",
+         "id": "ID de la tarea",
+         "titulo": "titulo de la tarea",
+         "fechaDevencimiento": "fecha de vencimiento",
+         "estado": {
+             "id": "ID del estado"
+         }
+    }
 
 Comentarios adicionales
 
