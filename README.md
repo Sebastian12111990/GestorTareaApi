@@ -248,6 +248,28 @@ Cuando se modifica con éxito:
 404 NOT FOUND: Cuando la tarea no existe.
  * No se proporciona cuerpo en la respuesta.
 
+Eliminar una Tarea 🗑️
+ * DELETE /tarea/{id}
+ * Descripción: Este endpoint permite eliminar una tarea existente. Para ello, es necesario enviar el ID de la tarea que se desea eliminar en la URL.
+ * Parámetros id: ID único de la tarea que se desea eliminar.
+
+Respuestas
+
+  * 200 OK: Se devuelve cuando la tarea se elimina con éxito.
+  * 500 INTERNAL SERVER ERROR: Puede devolverse si hay un problema al eliminar la tarea. Sin embargo, este caso no está específicamente manejado en el código proporcionado.
+    
+Ejemplo de solicitud
+
+        DELETE http://localhost:8080/tarea/1
+    
+Ejemplos de respuesta
+
+Cuando se elimina con éxito:
+ 200 OK : No se proporciona cuerpo en la respuesta.
+
+
+
+
 Comentarios adicionales
 
 Enfoque: Esta API se centra en la gestión de tareas y su asignación a usuarios. Se ha utilizado una estructura modular para separar las responsabilidades y facilitar la mantenibilidad.
