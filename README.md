@@ -18,41 +18,42 @@ Este proyecto es una API de gestión de tareas que permite crear, modificar, eli
     ALTER ROLE usuario_tarea WITH SUPERUSER;
     Una vez preparada la base de datos, el sistema ejecutará automáticamente el archivo data.sql interno para poblarla con información básica.
 
-🔑 Autenticación
+🔑 Autenticación con JWT en GestorTareaAPI
+    
+   * 📖 Descripción : En GestorTareaAPI utilizamos JSON Web Tokens (JWT) para garantizar la autenticación y autorización segura de nuestros usuarios. Al autenticarse con éxito, el usuario recibe un token que debe proporcionarse en las solicitudes subsiguientes para acceder a recursos protegidos.
 
-POST /authenticate
-
-Autentica a un usuario y retorna un token JWT para su posterior uso en la API.
-
-Parámetros del cuerpo de la solicitud:
-
-username (requerido): Nombre de usuario.
-password (requerido): Contraseña del usuario.
-
-Ejemplo del cuerpo de la solicitud:
+🌐 Endpoint de Autenticación 
+   * POST /authenticate
+     
+Cuerpo de la Solicitud (Request Body):
 
     {
-        "username": "nombreUsuario",
-        "password": "contraseñaUsuario"
+        "username": "seba@gmail.com",
+        "password": "12345"
     }
-
-Respuestas:
-
-200 OK: Si la autenticación es exitosa. Se retornará el token JWT.
-
-
-
-Ejemplo de respuesta exitosa:
     
+Respuestas Éxito (200 OK):
+
     {
         "jwt": "eyJhbGciOiJIUzI1NiJ9.eyJST0xFUyI6IltST0xFX1VTRVJdIiwic3ViIjoicHJ1ZWJhc0BnbWFpbC5jb20iLCJpYXQiOjE2OTU3OTY5ODIsImV4cCI6MTY5NTgxNDk4Mn0.Wfq9qkkv84e6bfTVVnArmiAG9y_8fzExKonq797fjOc",
         "refreshToken": null,
         "email": "pruebas@gmail.com"
     }
+    
+Respuestas invalidad
+ * Error de Credenciales (500 Internal Server Error): Si el nombre de usuario o la contraseña no son correctos.
+ * Datos Faltantes (500 Internal Server Error): Si falta el nombre de usuario o la contraseña en la solicitud.
+ * Unauthorized 401 : Si la autenticación falla, por ejemplo, debido a credenciales incorrectas.
 
-401 Unauthorized: Si la autenticación falla, por ejemplo, debido a credenciales incorrectas.
+Cómo Usar el JWT 🛡
+Una vez que hayas obtenido tu JWT, debes incluirlo en el encabezado Authorization de tus solicitudes subsiguientes:
 
-   API de Tareas 📚
+    Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJST0xFUyI6IltST0xFX1VTRVJdIiwic3ViIjoicHJ1ZWJhc0BnbWFpbC5jb20iLCJpYXQiOjE2OTU3OTY5ODIsImV4cCI6MTY5NTgxNDk4Mn0.Wfq9qkkv84e6bfTVVnArmiAG9y_8fzExKonq797fjOc
+  
+Este token garantiza que estás autenticado y autorizado para acceder a los recursos solicitados.
+
+ API de Tareas 📚
+ 
    La API de Tareas permite a los desarrolladores interactuar con un conjunto de operaciones CRUD básicas para gestionar tareas.
    
    Listar Tareas 📋
