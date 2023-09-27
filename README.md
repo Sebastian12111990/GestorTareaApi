@@ -188,6 +188,65 @@ Cuando se crea con éxito:
              "id": "ID del estado"
          }
     }
+Modificar una Tarea 🛠️
+ * PUT /tarea/{id}
+ * Descripción: Este endpoint permite modificar una tarea existente. Es necesario enviar el ID de la tarea que se desea modificar en la URL y los detalles de la tarea en el cuerpo de la solicitud.
+ * Parámetros id: ID único de la tarea que se desea modificar.
+
+Cuerpo de la Solicitud
+Debes enviar un objeto JSON con los campos que desees modificar:
+
+ * titulo: Título de la tarea.
+ * fechaDevencimiento: Fecha de vencimiento de la tarea.
+ * estado: Objeto que contiene el ID del estado de la tarea.
+   
+Respuestas
+ * 200 OK: Se devuelve cuando la tarea se modifica con éxito.
+ * 400 BAD REQUEST: Se devuelve cuando hay errores en la solicitud, falta información requerida o el estado proporcionado no es válido.
+ * 404 NOT FOUND: Se devuelve cuando no se encuentra la tarea con el ID proporcionado.
+
+Ejemplo de solicitud
+
+    PUT http://localhost:8080/tarea/1
+    Content-Type: application/json
+    
+    {
+        "titulo":"Programar Frontend",
+        "fechaDevencimiento": "28-09-2023 12:00",
+        "estado" : {
+            "id":2
+        }
+    }
+    
+Ejemplos de respuesta
+
+Cuando el estado no es válido:
+
+    {
+        "message": "Estado no encontrado"
+    }
+    
+Cuando hay errores de validación:
+    
+    {
+        "fechaDevencimiento": "no debe ser nulo",
+        "titulo": "no debe estar vacío"
+    }
+Cuando se modifica con éxito:
+
+    {
+      "createdAt": "fecha de creación",
+      "updatedAt": "fecha de actualización",
+      "id": "ID de la tarea",
+      "titulo": "titulo modificado",
+      "fechaDevencimiento": "fecha de vencimiento modificada",
+      "estado": {
+          "id": "ID del estado modificado"
+      }
+    }
+    
+404 NOT FOUND: Cuando la tarea no existe.
+ * No se proporciona cuerpo en la respuesta.
 
 Comentarios adicionales
 
