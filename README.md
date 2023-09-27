@@ -1,4 +1,4 @@
-📌 Gestor de Tareas API
+ntrada📌 Gestor de Tareas API
 
 Este proyecto es una API de gestión de tareas que permite crear, modificar, eliminar y asignar tareas a usuarios.
 
@@ -271,8 +271,9 @@ Cuando se elimina con éxito:
 Asignar Usuario a una Tarea 🧑‍💼
  * POST /usuario/{usuarioId}/tarea/{tareaId}
  * Descripción : Este endpoint permite asignar un usuario a una tarea específica. Se requiere enviar tanto el ID del usuario como el ID de la tarea en la URL.
- * Parámetros usuarioId: ID único del usuario que se desea asignar.
-              tareaId  : ID único de la tarea a la que se desea asignar el usuario.
+ * Parámetros
+     * usuarioId: ID único del usuario que se desea asignar.
+     * tareaId  : ID único de la tarea a la que se desea asignar el usuario.
    
 Respuestas
   * 200 OK: Se devuelve cuando la asignación es exitosa o si el usuario ya ha sido asignado a la tarea anteriormente.
@@ -308,7 +309,45 @@ Usuario no encontrados:
         "message": "usuario no encontrado"
     }
 
-Tarea no ecnontrada
+Tarea no encontrada
+
+    {
+        "message": "tarea no encontrada"
+    }
+
+Eliminar Asignación de Usuario a Tarea ❌
+ * DELETE /usuario/{usuarioId}/tarea/{tareaId}
+ * Descripción: Este endpoint elimina la asignación de un usuario a una tarea específica. Se requiere enviar tanto el ID del usuario como el ID de la tarea en la URL.
+ * Parámetros
+     * usuarioId: ID único del usuario que se desea desasignar.
+     * tareaId: ID único de la tarea de la que se desea desasignar el usuario.
+     * 
+Respuestas
+  * 200 OK: Se devuelve cuando la desasignación es exitosa o si el usuario no estaba asignado previamente a la tarea.
+  * 404 NOT FOUND: Se devuelve cuando el usuario o la tarea no se encuentran en el sistema.
+  * 
+Ejemplo de solicitud
+
+        DELETE http://localhost:8080/usuario/1/tarea/2
+    
+Ejemplos de respuesta
+
+     {
+         "message": "usuario eliminado de la tarea"
+     }
+
+No había relación previa: entre usuario y tarea
+
+    {
+        "message": "relacion entre usuario y tarea no existe nada que eliminar"
+    }
+
+Usuario  no encontrados:
+
+    {
+        "message": "usuario no encontrado"
+    }
+Tarea no encontrada
 
     {
         "message": "tarea no encontrada"
@@ -316,17 +355,24 @@ Tarea no ecnontrada
 
 
 
-Comentarios adicionales
+Comentarios Adicionales 📝
 
-Enfoque: Esta API se centra en la gestión de tareas y su asignación a usuarios. Se ha utilizado una estructura modular para separar las responsabilidades y facilitar la mantenibilidad.
+ * Enfoque: Nuestra API está diseñada para gestionar tareas y asignarlas a usuarios específicos. Hemos adoptado un diseño modular que separa eficientemente las responsabilidades, facilitando tanto la escalabilidad como la mantenibilidad a largo plazo.
+   
+ * Decisiones de Diseño 🎨: Elección del Framework: Nos decantamos por Spring Boot debido a su robustez y eficiencia en la creación de aplicaciones RESTful, además de su versátil ecosistema de herramientas.
 
-Decisiones de diseño: Opté por usar Spring Boot debido a su facilidad para crear aplicaciones web y RESTful rápidamente. La seguridad se gestiona mediante JWT para asegurar los endpoints y proporcionar autenticación.
+ * Estrategia de Seguridad: Hemos integrado Spring Security en conjunto con JWT (JSON Web Tokens). Esta combinación nos permite garantizar una autenticación sólida y una gestión eficiente de autorizaciones, asegurando cada uno de los endpoints de nuestra API.
 
-Tecnologías y bibliotecas específicas:
+Tecnologías y Bibliotecas Específicas 🛠:
 
-Spring Boot: Para la estructura general de la aplicación y la inyección de dependencias.
-Spring Security: para la seguridad de la aplicacion y permisos
-Spring JPA : para el mapeo de tablas y relaciones
-JWT: Para la autenticación y generación de tokens seguros.
-PostgreSQL: Como sistema de gestión de bases de datos.
-Jakarta: Para la gestión de transacciones.
+- Spring Boot: Constituye la columna vertebral de nuestra aplicación, proporcionando inyección de dependencias y facilitando la configuración.
+
+- Spring Security: Es fundamental para la gestión de la seguridad en nuestra aplicación, otorgando roles y permisos específicos.
+
+- Spring JPA: Lo hemos implementado para manejar la persistencia y las relaciones entre entidades.
+
+- JWT: Nos ayuda en la autenticación y en la generación segura de tokens.
+
+- PostgreSQL: Hemos elegido este SGBD por su eficiencia y capacidad de manejo de grandes volúmenes de datos.
+
+
