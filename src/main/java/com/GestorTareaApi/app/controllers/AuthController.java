@@ -27,16 +27,15 @@ import java.util.Map;
 @RestController
 public class AuthController {
 
-    @Autowired
     private  AuthenticationManager authenticationManager;
-
-    @Autowired
     private JwtUserDetailService jwtUserDetailService;
-
-    @Autowired
     private JwtTokenService jwtService;
 
-
+    public AuthController(AuthenticationManager authenticationManager, JwtUserDetailService jwtUserDetailService, JwtTokenService jwtService) {
+        this.authenticationManager = authenticationManager;
+        this.jwtUserDetailService = jwtUserDetailService;
+        this.jwtService = jwtService;
+    }
 
     @PostMapping("/authenticate")
     public ResponseEntity<?> postToken(@Valid @RequestBody JWTRequest request , BindingResult result){

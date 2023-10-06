@@ -135,6 +135,5 @@ public class ITareaServiceImpl implements ITareaService {
     @Override
     public Boolean buscarTareaPortitulo(String titulo) {
         return tareaRepository.buscarTareaPorTitulo(titulo).size()>0;
-
     }
 }
