@@ -36,7 +36,6 @@ public class GlobalExceptionHandler {
         this.addMessages("message" ,  "No existe relacions");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(this.getMessages());
     }
-
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> handleRuntimeExceptionException(RuntimeException e) {
         this.addMessages("message" ,  "Credenciales Invalidas");
