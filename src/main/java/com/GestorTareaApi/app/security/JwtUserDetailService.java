@@ -21,8 +21,8 @@ public class JwtUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.usuarioRepository.findByEmail(username).map(usuario -> {
 
+        return this.usuarioRepository.findByEmail(username).map(usuario -> {
 
             final var authorities = usuario.getUsuarioPerfiles().stream()
                     .map(usuarioPerfil  -> new SimpleGrantedAuthority(usuarioPerfil.getPerfil().getNombrePerfil()))

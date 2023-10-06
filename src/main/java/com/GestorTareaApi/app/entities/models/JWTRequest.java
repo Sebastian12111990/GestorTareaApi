@@ -1,10 +1,14 @@
 package com.GestorTareaApi.app.entities.models;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class JWTRequest {
 
 
+    @NotBlank
     private String username;
 
+    @NotBlank
     private String password;
 
     public JWTRequest() {

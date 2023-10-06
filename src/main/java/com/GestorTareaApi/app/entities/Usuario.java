@@ -1,8 +1,7 @@
 package com.GestorTareaApi.app.entities;
 
 import com.GestorTareaApi.app.utils.FechasBase;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -28,10 +27,10 @@ public class Usuario extends FechasBase implements Serializable {
     @Column(name = "email")
     private String email;
 
+
+    @JsonManagedReference
     @OneToMany(mappedBy="usuario")
     private List<UsuarioTarea> usuarioTareas;
-
-
     @OneToMany(mappedBy = "usuario" , fetch = FetchType.EAGER)
     private List<UsuarioPerfil> usuarioPerfiles;
 

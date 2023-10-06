@@ -6,6 +6,8 @@ import com.GestorTareaApi.app.entities.models.JWTResponse;
 import com.GestorTareaApi.app.security.JwtTokenService;
 import com.GestorTareaApi.app.security.JwtUserDetailService;
 import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.validation.Valid;
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +15,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -35,7 +39,17 @@ public class AuthController {
 
 
     @PostMapping("/authenticate")
-    public ResponseEntity<?> postToken(@RequestBody JWTRequest request){
+    public ResponseEntity<?> postToken(@Valid @RequestBody JWTRequest request , BindingResult result){
+
+        if (result.hasErrors()){
+            Map<String , String> erroress = new HashMap<>();
+
+            result.getFieldErrors().forEach(errors -> {
+                erroress.put(errors.getField() , errors.getDefaultMessage());
+            });
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erroress) ;
+        }
 
         this.auntheticate(request);
 
@@ -46,8 +60,6 @@ public class AuthController {
         return ResponseEntity.ok(new JWTResponse(token , request.getUsername()));
 
     }
-
-
 
     private void auntheticate(JWTRequest request) {
         try {

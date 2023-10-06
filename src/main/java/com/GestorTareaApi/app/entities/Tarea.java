@@ -1,7 +1,10 @@
 package com.GestorTareaApi.app.entities;
 
 import com.GestorTareaApi.app.utils.FechasBase;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -31,6 +34,8 @@ public class Tarea extends FechasBase implements Serializable {
     @JoinColumn(name = "estado_id")
     private EstadoTarea estado;
 
+    @JsonIgnore
+    @JsonManagedReference
     @OneToMany(mappedBy="tarea")
     private List<UsuarioTarea> usuarioTareas;
 

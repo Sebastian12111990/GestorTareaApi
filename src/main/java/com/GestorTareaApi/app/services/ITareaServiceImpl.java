@@ -47,10 +47,10 @@ public class ITareaServiceImpl implements ITareaService {
     public void borrarTarea(Long id) {
         tareaRepository.deleteById(id);
     }
-
+/*
     @Override
     @Transactional
-    public String asignarUsuarioTarea(Usuario usuario, Tarea tarea) {
+    public String asignarUsuarioTarea2(Usuario usuario, Tarea tarea) {
 
         String mensaje = "";
 
@@ -76,6 +76,19 @@ public class ITareaServiceImpl implements ITareaService {
 
         return mensaje;
     }
+*/
+   // @Override
+    @Transactional //Programacion Funcional
+    public String asignarUsuarioTarea(Usuario usuario, Tarea tarea) {
+        return usuarioTareaRepository.findByUsuarioAndTarea(tarea.getId() , usuario.getId()).map( usuarioTarea -> {
+            return "usuario ya ha sido asignado a esta tarea";
+        }).orElseGet(() -> {
+            return usuarioTareaRepository.save(new UsuarioTarea(usuario , tarea)).getId()!=null ? "usuario " + usuario.getNombre()
+                    + " " + usuario.getApellido()
+                    + " " + "ha sido asignado en la tarea"
+                    + " " + tarea.getTitulo() : "error al asignar usuario a tarea";
+        });
+    }
 
     @Override
     @Transactional
@@ -89,7 +102,7 @@ public class ITareaServiceImpl implements ITareaService {
 
             usuarioTareaRepository.delete(usuarioTareaOptional.get());
 
-                mensaje =  "usuario eliminado de la tarea";
+            mensaje =  "usuario eliminado de la tarea";
 
         }else{
             mensaje = "relacion entre usuario y tarea no existe nada que eliminar";
@@ -97,17 +110,31 @@ public class ITareaServiceImpl implements ITareaService {
 
         return mensaje;
     }
+    /*
+        @Override
+        @Transactional
+        public String eliminarUsuarioTarea(Usuario usuario, Tarea tarea) {
 
+            String mensaje = "";
+
+            Optional<UsuarioTarea> usuarioTareaOptional = usuarioTareaRepository.findByUsuarioAndTarea(tarea.getId() , usuario.getId());
+
+            if (usuarioTareaOptional.isPresent()){
+
+                usuarioTareaRepository.delete(usuarioTareaOptional.get());
+
+                    mensaje =  "usuario eliminado de la tarea";
+
+            }else{
+                mensaje = "relacion entre usuario y tarea no existe nada que eliminar";
+            }
+
+            return mensaje;
+        }
+    */
     @Override
     public Boolean buscarTareaPortitulo(String titulo) {
-
-        List<Tarea> tareaList = tareaRepository.buscarTareaPorTitulo(titulo);
-
-        if (tareaList.size()>0){
-            return true;
-        }else{
-            return false;
-        }
+        return tareaRepository.buscarTareaPorTitulo(titulo).size()>0;
 
     }
 }

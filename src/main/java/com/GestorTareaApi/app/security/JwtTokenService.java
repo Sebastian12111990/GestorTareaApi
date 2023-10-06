@@ -54,15 +54,16 @@ public class JwtTokenService {
     }
 
     public Boolean validateToken(String token , UserDetails userDetails) {
+
         final var usernameFromUserDetails = userDetails.getUsername();
         final var usernameFromJWT  = this.getUsernameFromJWT(token);
 
         return (usernameFromUserDetails.equals(usernameFromJWT)) && !this.isTokenExpired(token);
     }
 
+    /*Genera token*/
     private String getToken(Map<String, Object> claims, String subject) {
         final var key = Keys.hmacShaKeyFor(JWT_SECRET.getBytes(StandardCharsets.UTF_8));
-
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
@@ -78,5 +79,7 @@ public class JwtTokenService {
 
         return this.getToken(claims, userDetails.getUsername());
     }
+
+    /*Fin genera token*/
 
 }

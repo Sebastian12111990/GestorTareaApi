@@ -1,8 +1,6 @@
 package com.GestorTareaApi.app;
 
 import com.GestorTareaApi.app.entities.Usuario;
-import com.GestorTareaApi.app.entities.UsuarioPerfil;
-import com.GestorTareaApi.app.repositories.UsuarioPerfilRepository;
 import com.GestorTareaApi.app.repositories.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
