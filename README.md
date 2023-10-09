@@ -340,11 +340,14 @@ Cuando no encuentra una tarea:
 Cuando hay errores de validación:
      
     {
-        "status": "info",
-        "message": "tarea no encontrada con ID : 422",
-        "statusCode": 404,
+        "status": "error",
+        "message": "revisar campos nulos",
+        "statusCode": 400,
         "data": null,
-        "errorDetails": null
+        "errorDetails": {
+            "fechaDevencimiento": "no debe ser nulo",
+            "titulo": "no debe estar vacío"
+        }
     }
 
 Cuando se modifica con éxito:
