@@ -3,12 +3,8 @@ package com.GestorTareaApi.app.security;
 import java.io.IOException;
 import java.util.Objects;
 
-import com.GestorTareaApi.app.entities.UsuarioPerfil;
-import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -36,7 +32,7 @@ public class JwtValidationFilter extends OncePerRequestFilter{
     private static final String AUTHORIZATION_HEADER_BEARER = "Bearer ";
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         final var requestTokenHeader =  request.getHeader(AUTHORIZATION_HEADER);
 
@@ -47,8 +43,13 @@ public class JwtValidationFilter extends OncePerRequestFilter{
         if(Objects.nonNull(requestTokenHeader) && requestTokenHeader.startsWith(AUTHORIZATION_HEADER_BEARER)) {
             jwt = requestTokenHeader.substring(7);
 
-            try {
-                username = jwtService.getUsernameFromJWT(jwt);
+
+
+                try {
+                    username = jwtService.getUsernameFromJWT(jwt);
+                } catch (ExpiredJwtException e) {
+e.printStackTrace();
+                }
 
                 if(Objects.nonNull(username) && Objects.isNull(SecurityContextHolder.getContext().getAuthentication())) {
 
@@ -65,13 +66,7 @@ public class JwtValidationFilter extends OncePerRequestFilter{
 
                 }
 
-            }catch(IllegalArgumentException ex) {
-                ex.printStackTrace();
-            }catch(ExpiredJwtException ex){
-                ex.printStackTrace();
-            }catch(SignatureException ex){
-                ex.printStackTrace();
-            }
+
 
         }
         filterChain.doFilter(request, response);

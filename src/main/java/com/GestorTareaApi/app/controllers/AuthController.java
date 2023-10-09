@@ -27,9 +27,9 @@ import java.util.Map;
 @RestController
 public class AuthController {
 
-    private  AuthenticationManager authenticationManager;
-    private JwtUserDetailService jwtUserDetailService;
-    private JwtTokenService jwtService;
+    private final  AuthenticationManager authenticationManager;
+    private final JwtUserDetailService jwtUserDetailService;
+    private final JwtTokenService jwtService;
 
     public AuthController(AuthenticationManager authenticationManager, JwtUserDetailService jwtUserDetailService, JwtTokenService jwtService) {
         this.authenticationManager = authenticationManager;

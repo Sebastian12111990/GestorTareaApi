@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -21,20 +20,15 @@ public class JwtTokenService {
     public static final String JWT_SECRET= "jxgEQe.XHuPq8VdbyYFNkAN.dudQ0903YUn4";
 
     private Claims getAllClaimnsFromTokens(String token) {
-
         final var key = Keys.hmacShaKeyFor(JWT_SECRET.getBytes(StandardCharsets.UTF_8));
+
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
 
     }
 
     public <T> T getClaimsFromToken(String token , Function<Claims , T> claimsResolver) {
-        try{
             final var claims = this.getAllClaimnsFromTokens(token);
             return claimsResolver.apply(claims);
-        }catch (ExpiredJwtException ex){
-            ex.printStackTrace();
-            return null;
-        }
     }
 
     private Date getExpirationDateFromToken(String token) {

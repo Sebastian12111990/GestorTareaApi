@@ -42,6 +42,19 @@ public class Tarea extends FechasBase implements Serializable {
     public Tarea() {
 
     }
+
+    public Tarea(String titulo, EstadoTarea estado) {
+        this.titulo = titulo;
+        this.estado = estado;
+    }
+
+    public Tarea(Long id, String titulo, Timestamp fechaDevencimiento, EstadoTarea estado) {
+        this.id = id;
+        this.titulo = titulo;
+        this.fechaDevencimiento = fechaDevencimiento;
+        this.estado = estado;
+    }
+
     public Tarea(String titulo, Timestamp fechaDevencimiento, EstadoTarea estado) {
         this.titulo = titulo;
         this.fechaDevencimiento = fechaDevencimiento;

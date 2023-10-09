@@ -17,6 +17,8 @@ public interface ITareaService {
 
     Tarea guardarTarea(Tarea tarea);
 
+    Tarea modificarTarea(Long id , Tarea tarea);
+
     void borrarTarea(Long id);
     /* asignacion deasignacion usuario */
     String asignarUsuarioTarea(Usuario usuario , Tarea tarea);

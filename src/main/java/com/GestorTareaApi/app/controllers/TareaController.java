@@ -1,11 +1,13 @@
 package com.GestorTareaApi.app.controllers;
 
+import com.GestorTareaApi.app.dtos.ResponseCustom;
 import com.GestorTareaApi.app.entities.Tarea;
 import com.GestorTareaApi.app.entities.Usuario;
+import com.GestorTareaApi.app.exceptions.TareaNoEncontradaException;
+import com.GestorTareaApi.app.exceptions.UsuarioNoEncontradoException;
 import com.GestorTareaApi.app.services.ITareaService;
 import com.GestorTareaApi.app.services.IUsuarioService;
 import jakarta.validation.Valid;
-import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -31,99 +33,68 @@ public class TareaController {
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity<?> buscarTarea(@PathVariable Long id){
+    public ResponseEntity<?> buscarTarea(@PathVariable Long id){
+        Optional<Tarea> tareaOptional = tareaService.buscarTareaId(id);
 
-        return tareaService.buscarTareaId(id).map(tarea ->
-                        ResponseEntity.status(HttpStatus.OK).body(tarea)).
-                orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        if(tareaOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseCustom("success" ,  "" , HttpStatus.OK.value() , tareaOptional.get(),null));
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseCustom("info" , "tarea no encontrada" , HttpStatus.NOT_FOUND.value(), null , null));
 
     }
 
     @PostMapping("/")
-    private ResponseEntity<?> crearTarea(@Valid @RequestBody Tarea tarea , BindingResult result){
+    public ResponseEntity<?> crearTarea(@Valid @RequestBody Tarea tarea , BindingResult result){
 
         if (result.hasErrors()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validar(result));
-        }
-
-        if (tarea.getEstado().getId() == null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("se necesita estado id");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new ResponseCustom("error" , "revisar campos nulos", HttpStatus.BAD_REQUEST.value(), null, validar(result)));
         }
 
         if (tareaService.buscarTareaPortitulo(tarea.getTitulo())){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ya existe tarea");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseCustom("error" , "ya existe tarea" , HttpStatus.BAD_REQUEST.value(), null , null));
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(tareaService.guardarTarea(tarea));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseCustom("info" , "tarea creada con éxito" , HttpStatus.CREATED.value(),tareaService.guardarTarea(tarea),null));
     }
 
+
     @PutMapping("/{id}")
-    private ResponseEntity<?> modificarTarea(@Valid @RequestBody Tarea tarea , BindingResult result , @PathVariable Long id){
+    public ResponseEntity<?> modificarTarea(@Valid @RequestBody Tarea tarea , BindingResult result , @PathVariable Long id){
 
         if (result.hasErrors()){
-            Map<String, String> errores =  validar(result);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new ResponseCustom("error" , "revisar campos nulos", HttpStatus.BAD_REQUEST.value(), null, validar(result)));
         }
 
-        if (tarea.getEstado().getId() == null){
-            return new ResponseEntity<>("Estado no encontrado", HttpStatus.BAD_REQUEST);
-        }
-
-        return tareaService.buscarTareaId(id).map(tareaExistente -> {
-            tareaExistente.setFechaDevencimiento(tarea.getFechaDevencimiento());
-            tareaExistente.setEstado(tarea.getEstado());
-            tareaExistente.setTitulo(tarea.getTitulo());
-            return ResponseEntity.status(HttpStatus.CREATED).body(tareaService.guardarTarea(tareaExistente));
-        }).orElseGet(() -> ResponseEntity.badRequest().build());
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseCustom("success" , "tarea modificada" , HttpStatus.OK.value() , tareaService.modificarTarea(id , tarea),null));
 
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity<?> eliminarTarea(@PathVariable Long id){
+    public ResponseEntity<?> eliminarTarea(@PathVariable Long id){
         tareaService.borrarTarea(id);
        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping("/usuario/{usuarioId}/tarea/{tareaId}")
-    private ResponseEntity<?> asignarUsuarioTarea(@PathVariable Long usuarioId ,  @PathVariable Long tareaId){
+    public ResponseEntity<?> asignarUsuarioTarea(@PathVariable Long usuarioId ,  @PathVariable Long tareaId){
 
-        Optional<Usuario> usuarioOptional = usuarioService.buscarUsuario(usuarioId);
+        Usuario usuario = usuarioService.buscarUsuario(usuarioId).orElseThrow(()->new UsuarioNoEncontradoException(usuarioId));
 
-        if (!usuarioOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("usuario no encontrado");
-        }
+        Tarea tarea  = tareaService.buscarTareaId(tareaId).orElseThrow(()->new TareaNoEncontradaException(tareaId));
 
-        Optional<Tarea> tareaOptional = tareaService.buscarTareaId(tareaId);
-
-        if (!tareaOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("tarea no encontrada");
-        }
-
-        String mensaje = tareaService.asignarUsuarioTarea(usuarioOptional.get() , tareaOptional.get());
-
-
-        return ResponseEntity.status(HttpStatus.OK).body(mensaje);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseCustom("success" , tareaService.asignarUsuarioTarea(usuario , tarea) , HttpStatus.OK.value(),null , null));
     }
 
     @DeleteMapping("/usuario/{usuarioId}/tarea/{tareaId}")
-    private ResponseEntity<?> eliminarUsuarioTarea(@PathVariable Long usuarioId ,  @PathVariable Long tareaId){
+    public ResponseEntity<?> eliminarUsuarioTarea(@PathVariable Long usuarioId ,  @PathVariable Long tareaId){
 
-        Optional<Usuario> usuarioOptional = usuarioService.buscarUsuario(usuarioId);
+        Usuario usuario = usuarioService.buscarUsuario(usuarioId).orElseThrow(()-> new UsuarioNoEncontradoException(usuarioId));
 
-        if (!usuarioOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("usuario no encontrado");
-        }
+        Tarea tarea = tareaService.buscarTareaId(tareaId).orElseThrow(()-> new TareaNoEncontradaException(tareaId));
 
-        Optional<Tarea> tareaOptional = tareaService.buscarTareaId(tareaId);
-
-        if (!tareaOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("tarea no encontrada");
-        }
-
-        String mensaje = tareaService.eliminarUsuarioTarea(usuarioOptional.get() , tareaOptional.get());
-
-
-        return ResponseEntity.status(HttpStatus.OK).body(mensaje);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseCustom("success" , tareaService.eliminarUsuarioTarea(usuario , tarea) , HttpStatus.OK.value() , null , null));
     }
 
     private  Map<String, String>  validar(BindingResult result){

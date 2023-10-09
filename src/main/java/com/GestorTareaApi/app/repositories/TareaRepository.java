@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface TareaRepository extends CrudRepository<Tarea, Long> {
-    @Query("select t from Tarea t where t.titulo = :titulo ")
-    List<Tarea> buscarTareaPorTitulo(String titulo);
+    @Query("select count(t) from Tarea t where t.titulo = :titulo ")
+    Long countBuscarTareaPorTitulo(String titulo);
 
 }
