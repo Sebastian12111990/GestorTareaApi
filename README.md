@@ -137,36 +137,34 @@ Este token garantiza que estás autenticado y autorizado para acceder a los recu
 
    Ejemplo de respuesta con tareas:
   
-      [
-          {
-              "createdAt": "2023-09-27T14:26:34.187+00:00",
-              "updatedAt": "2023-09-27T14:26:34.187+00:00",
-              "id": 1,
-              "titulo": "Modelar BD3",
-              "fechaDevencimiento": "26-09-2023 08:00",
-              "estado": {
-                  "createdAt": "2023-09-27T14:23:03.411+00:00",
-                  "updatedAt": "2023-09-27T14:23:03.411+00:00",
-                  "id": 1,
-                  "estado": "Pendiente"
-              },
-              "usuarioTareas": []
-          },
-          {
-              "createdAt": "2023-09-27T14:26:57.257+00:00",
-              "updatedAt": "2023-09-27T14:26:57.257+00:00",
-              "id": 2,
-              "titulo": "Programar Backend",
-              "fechaDevencimiento": "26-09-2023 08:00",
-              "estado": {
-                  "createdAt": "2023-09-27T14:23:03.411+00:00",
-                  "updatedAt": "2023-09-27T14:23:03.411+00:00",
-                  "id": 1,
-                  "estado": "Pendiente"
-              },
-              "usuarioTareas": []
-          }
-      ]
+    [
+        {
+            "createdAt": "2023-09-27T14:57:28.991+00:00",
+            "updatedAt": "2023-09-27T14:57:28.991+00:00",
+            "id": 3,
+            "titulo": "Programar FrontEnd",
+            "fechaDevencimiento": "26-09-2023 08:00",
+            "estado": {
+                "createdAt": "2023-09-27T14:23:03.411+00:00",
+                "updatedAt": "2023-09-27T14:23:03.411+00:00",
+                "id": 1,
+                "estado": "Pendiente"
+            }
+        },
+        {
+            "createdAt": "2023-09-27T14:26:57.257+00:00",
+            "updatedAt": "2023-09-30T20:07:02.551+00:00",
+            "id": 2,
+            "titulo": "Modelar BD",
+            "fechaDevencimiento": "26-09-2023 16:00",
+            "estado": {
+                "createdAt": "2023-09-27T14:23:03.414+00:00",
+                "updatedAt": "2023-09-27T14:23:03.414+00:00",
+                "id": 3,
+                "estado": "Completada"
+            }
+        }
+       ]
 
    Obtener Tarea por ID 🕵️‍♂️
    * GET /tarea/{id}
@@ -177,26 +175,39 @@ Este token garantiza que estás autenticado y autorizado para acceder a los recu
 
    Ejemplo de solicitud
    
-         GET http://localhost:8080/tarea/1
+     GET http://localhost:8080/tarea/1
+         
    Ejemplos de respuesta 200 OK
    
-        {
-           "createdAt": "2023-09-27T14:26:34.187+00:00",
-           "updatedAt": "2023-09-27T14:26:34.187+00:00",
-           "id": 1,
-           "titulo": "Modelar BD3",
-           "fechaDevencimiento": "26-09-2023 08:00",
-           "estado": {
-               "createdAt": "2023-09-27T14:23:03.411+00:00",
-               "updatedAt": "2023-09-27T14:23:03.411+00:00",
-               "id": 1,
-               "estado": "Pendiente"
-           },
-           "usuarioTareas": []
-       }
+     {
+         "status": "success",
+         "message": "",
+         "statusCode": 200,
+         "data": {
+             "createdAt": "2023-09-27T14:26:57.257+00:00",
+             "updatedAt": "2023-09-30T20:07:02.551+00:00",
+             "id": 2,
+             "titulo": "Modelar BD",
+             "fechaDevencimiento": "26-09-2023 16:00",
+             "estado": {
+                 "createdAt": "2023-09-27T14:23:03.414+00:00",
+                 "updatedAt": "2023-09-27T14:23:03.414+00:00",
+                 "id": 3,
+                 "estado": "Completada"
+             }
+         },
+         "errorDetails": null
+     }
+     
    Ejemplos de repuesta 404 NOT FOUND
 
-         No se proporciona cuerpo en la respuesta.
+     {
+        "status": "info",
+        "message": "tarea no encontrada",
+        "statusCode": 404,
+        "data": null,
+        "errorDetails": null
+    }
 
 
  Crear una nueva Tarea 📝
@@ -231,32 +242,60 @@ Ejemplos de respuesta
 Cuando la tarea ya existe:
 
     {
-        "message": "ya existe tarea"
+        "status": "error",
+        "message": "ya existe tarea",
+        "statusCode": 400,
+        "data": null,
+        "errorDetails": null
     }
 
 Cuando falta el ID del estado:
 
-     {
-         "message": "se necesita estado id"
-     }
+    {
+        "status": "error ",
+        "message": "Formato de Propiedad invalido -> JSON parse error: Unexpected character ('}' (code 125)): expected a value",
+        "statusCode": 400,
+        "data": null,
+        "errorDetails": null
+    }
+
+
 Cuando hay errores de validación:
 
     {
-        "fechaDevencimiento": "no debe ser nulo",
-        "titulo": "no debe estar vacío"
+        "status": "error",
+        "message": "revisar campos nulos",
+        "statusCode": 400,
+        "data": null,
+        "errorDetails": {
+            "fechaDevencimiento": "no debe ser nulo",
+            "titulo": "no debe estar vacío"
+        }
     }
+    
 Cuando se crea con éxito:
   
     {
-         "createdAt": "fecha de creación",
-         "updatedAt": "fecha de actualización",
-         "id": "ID de la tarea",
-         "titulo": "titulo de la tarea",
-         "fechaDevencimiento": "fecha de vencimiento",
-         "estado": {
-             "id": "ID del estado"
-         }
+        "status": "info",
+        "message": "tarea creada con éxito",
+        "statusCode": 201,
+        "data": {
+            "createdAt": "2023-10-09T16:10:54.548+00:00",
+            "updatedAt": "2023-10-09T16:10:54.548+00:00",
+            "id": 19,
+            "titulo": "Programar Front End React",
+            "fechaDevencimiento": "26-09-2023 08:00",
+            "estado": {
+                "createdAt": null,
+                "updatedAt": null,
+                "id": 1,
+                "estado": null
+            }
+        },
+        "errorDetails": null
     }
+
+
 Modificar una Tarea 🛠️
  * PUT /tarea/{id}
  * Descripción: Este endpoint permite modificar una tarea existente. Es necesario enviar el ID de la tarea que se desea modificar en la URL y los detalles de la tarea en el cuerpo de la solicitud.
@@ -271,7 +310,6 @@ Debes enviar un objeto JSON con los campos que desees modificar:
    
 Respuestas
  * 200 OK: Se devuelve cuando la tarea se modifica con éxito.
- * 400 BAD REQUEST: Se devuelve cuando hay errores en la solicitud, falta información requerida o el estado proporcionado no es válido.
  * 404 NOT FOUND: Se devuelve cuando no se encuentra la tarea con el ID proporcionado.
 
 Ejemplo de solicitud
@@ -287,33 +325,50 @@ Ejemplo de solicitud
         }
     }
     
-Ejemplos de respuesta
+Ejemplos de respuestas
 
-Cuando el estado no es válido:
+Cuando no encuentra una tarea:
 
     {
-        "message": "Estado no encontrado"
+        "status": "info",
+        "message": "tarea no encontrada con ID : 422",
+        "statusCode": 404,
+        "data": null,
+        "errorDetails": null
     }
     
 Cuando hay errores de validación:
-    
+     
     {
-        "fechaDevencimiento": "no debe ser nulo",
-        "titulo": "no debe estar vacío"
+        "status": "info",
+        "message": "tarea no encontrada con ID : 422",
+        "statusCode": 404,
+        "data": null,
+        "errorDetails": null
     }
+
 Cuando se modifica con éxito:
 
     {
-      "createdAt": "fecha de creación",
-      "updatedAt": "fecha de actualización",
-      "id": "ID de la tarea",
-      "titulo": "titulo modificado",
-      "fechaDevencimiento": "fecha de vencimiento modificada",
-      "estado": {
-          "id": "ID del estado modificado"
-      }
+        "status": "success",
+        "message": "tarea modificada",
+        "statusCode": 200,
+        "data": {
+            "createdAt": "2023-09-27T14:26:57.257+00:00",
+            "updatedAt": "2023-10-09T16:26:44.044+00:00",
+            "id": 2,
+            "titulo": "Modificar Tarea",
+            "fechaDevencimiento": "26-09-2023 16:00",
+            "estado": {
+                "createdAt": null,
+                "updatedAt": null,
+                "id": 3,
+                "estado": null
+            }
+        },
+        "errorDetails": null
     }
-    
+        
 404 NOT FOUND: Cuando la tarea no existe.
  * No se proporciona cuerpo en la respuesta.
 
@@ -356,32 +411,52 @@ Ejemplos de respuesta
 
 Asignación exitosa:
 
-     {
-         "message": "usuario Juan Pérez ha sido asignado en la tarea Programar Backend"
-     }
+    {
+        "status": "success",
+        "message": "usuario ha sido asignado en la tarea",
+        "statusCode": 200,
+        "data": null,
+        "errorDetails": null
+    }
      
 Error al asignar:
 
     {
-        "message": "error al asignar usuario a tarea"
+      "status": "success",
+      "message": "error al asignar usuario a tarea",
+      "statusCode": 400,
+      "data": null,
+      "errorDetails": null
     }
     
 Usuario ya asignado:
 
     {
-        "message": "usuario ya ha sido asignado a esta tarea"
+        "status": "success",
+        "message": "usuario ya ha sido asignado a esta tarea",
+        "statusCode": 200,
+        "data": null,
+        "errorDetails": null
     }
     
 Usuario no encontrados:
 
     {
-        "message": "usuario no encontrado"
+        "status": "info",
+        "message": "usuario no encontrado con la ID : 4",
+        "statusCode": 404,
+        "data": null,
+        "errorDetails": null
     }
 
 Tarea no encontrada
 
     {
-        "message": "tarea no encontrada"
+        "status": "info",
+        "message": "tarea no encontrada con ID : 213321",
+        "statusCode": 404,
+        "data": null,
+        "errorDetails": null
     }
 
 Eliminar Asignación de Usuario a Tarea ❌
@@ -401,25 +476,42 @@ Ejemplo de solicitud
     
 Ejemplos de respuesta
 
-     {
-         "message": "usuario eliminado de la tarea"
-     }
+    {
+        "status": "success",
+        "message": "usuario ha sido eliminado de la tarea",
+        "statusCode": 200,
+        "data": null,
+        "errorDetails": null
+    }
 
 No había relación previa: entre usuario y tarea
 
     {
-        "message": "relacion entre usuario y tarea no existe nada que eliminar"
+        "status": "info",
+        "message": "relacion entre usuario ID: 1 y la tarea ID: 2 no existe ",
+        "statusCode": 404,
+        "data": null,
+        "errorDetails": null
     }
 
 Usuario  no encontrados:
 
     {
-        "message": "usuario no encontrado"
+        "status": "info",
+        "message": "usuario no encontrado con la ID : 4",
+        "statusCode": 404,
+        "data": null,
+        "errorDetails": null
     }
+    
 Tarea no encontrada
 
     {
-        "message": "tarea no encontrada"
+        "status": "info",
+        "message": "tarea no encontrada con ID : 213321",
+        "statusCode": 404,
+        "data": null,
+        "errorDetails": null
     }
 
 
