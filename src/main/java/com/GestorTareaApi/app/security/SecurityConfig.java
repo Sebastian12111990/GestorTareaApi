@@ -22,7 +22,7 @@ public class SecurityConfig {
 
         http.sessionManagement( sess ->  sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        http.authorizeHttpRequests(auth -> auth.requestMatchers("/tarea/**" ).hasAuthority("ROLE_ADMIN").requestMatchers("/tarea/" ).hasAuthority("ROLE_ADMIN").anyRequest().permitAll())
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/authenticate").permitAll().requestMatchers("/tarea/**" ).hasAuthority("ROLE_ADMIN").requestMatchers("/tarea/" ).hasAuthority("ROLE_ADMIN").anyRequest().permitAll())
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
 
@@ -38,10 +38,9 @@ public class SecurityConfig {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration config ) throws Exception {

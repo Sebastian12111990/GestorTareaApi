@@ -1,20 +1,15 @@
 package com.GestorTareaApi.app.services;
 
-import com.GestorTareaApi.app.entities.EstadoTarea;
 import com.GestorTareaApi.app.entities.Tarea;
 import com.GestorTareaApi.app.mothers.TareaMother;
 import com.GestorTareaApi.app.repositories.TareaRepository;
 import com.GestorTareaApi.app.repositories.UsuarioRepository;
 import com.GestorTareaApi.app.repositories.UsuarioTareaRepository;
-import jakarta.xml.bind.ValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,14 +42,57 @@ public class TareaServiceImplTest {
         verify(tareaRepositoryMock , times(1)).save(any(Tarea.class));
 
     }
+    @Test
+    void testModificarTareConExito(){
+
+
+        var idModificar = 1L;
+
+        Tarea tareaModificar =   TareaMother.tareaPredeterminada();
+
+        when(tareaRepositoryMock.findById(idModificar)).thenReturn(Optional.of(tareaModificar));
+        when(tareaRepositoryMock.save(tareaModificar)).thenReturn(tareaModificar);
+
+        tareaModificar.setTitulo("Tarea Modificada");
+
+        Tarea resultado = tareaService.modificarTarea(idModificar, tareaModificar);
+
+        assertNotNull(resultado);
+        assertEquals("Tarea Modificada", resultado.getTitulo());
+        verify(tareaRepositoryMock, times(1)).findById(idModificar);
+        verify(tareaRepositoryMock, times(1)).save(tareaModificar);
+
+    }
+
+    @Test
+    void testModificarTareConExito2(){
+
+
+        var idModificar = 1L;
+
+        Tarea tareaOriginal  = TareaMother.tareaPredeterminada();
+
+        Tarea tareaModificar = TareaMother.tareaModificada();
+
+        when(tareaRepositoryMock.findById(idModificar)).thenReturn(Optional.of(tareaOriginal));
+
+        when(tareaRepositoryMock.save(any(Tarea.class))).thenReturn(tareaModificar);
+
+        Tarea resultado = tareaService.modificarTarea(idModificar, tareaModificar);
+
+        assertNotNull(resultado);
+        assertEquals("Tarea Modificada", resultado.getTitulo());
+        verify(tareaRepositoryMock, times(1)).findById(idModificar);
+        verify(tareaRepositoryMock, times(1)).save(any(Tarea.class));
+
+
+    }
+
 
     @Test
     public void testListarTarea(){
 
-        List<Tarea> tareasMock = Arrays.asList(
-                TareaMother.tareaPredeterminada(),
-                new Tarea("Otra Tarea", new Timestamp(System.currentTimeMillis()), new EstadoTarea("COMPLETADA"))
-        );
+        List<Tarea> tareasMock = TareaMother.tareaListaPredeterminada();
 
         when(tareaRepositoryMock.findAll()).thenReturn(tareasMock);
 
@@ -62,8 +100,8 @@ public class TareaServiceImplTest {
 
         assertNotNull(result);
         assertEquals(2 , result.size());
-        assertEquals("Tarea de Ejemplo",result.get(0).getTitulo());
-        assertEquals("Otra Tarea" , result.get(1).getTitulo());
+        assertEquals("Tarea de Ejemplo", result.get(0).getTitulo());
+        assertEquals("Otra Tarea"      , result.get(1).getTitulo());
     }
     @Test
     public void testBuscarTareaPorTitulo(){
@@ -117,10 +155,7 @@ public class TareaServiceImplTest {
     }
 
 
-    @Test
-    void testModificarTareConExito(){
 
-    }
 
 
 }
